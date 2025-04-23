@@ -1,45 +1,36 @@
 {
-  "name": "my-demo-app",
-  "version": "0.1.0",
+  "name": "react-vite-ts",
   "private": true,
-  "dependencies": {
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-icons": "^5.5.0",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
-  },
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {
+    "@workday/canvas-kit-react-fonts": "12.6.5",
+    "lucide-react": "^0.503.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-icons": "5.5.0",
+    "react-router-dom": "^7.5.1",
+    "react-toastify": "^11.0.5"
   },
   "devDependencies": {
-    "gh-pages": "^6.3.0"
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.17.0",
+    "@typescript-eslint/parser": "^8.17.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "10.4.20",
+    "eslint": "^9.16.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "postcss": "8.4.49",
+    "tailwindcss": "3.4.16",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.3"
   }
 }
