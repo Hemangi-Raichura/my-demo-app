@@ -1,0 +1,43 @@
+{
+  "Salary": [
+    { "label": "Base Salary", "value": "", "frequency": "Monthly" },
+    { "label": "Performance Bonus", "value": "", "frequency": "" }
+  ],
+  "Freelance": [
+    { "label": "Website Development", "value": "", "frequency": "Weekly" },
+    { "label": "Content Writing", "value": "", "frequency": "Monthly" }
+  ],
+  "Other Income": [
+    { "label": "Rental Income", "value": "", "frequency": "Monthly" },
+    { "label": "Dividends", "value": "", "frequency": "" }
+  ],
+  "Housing": [
+    { "label": "Rent", "value": "", "frequency": "Monthly" },
+    { "label": "Maintenance", "value": "", "frequency": "" }
+  ],
+  "Utilities": [
+    { "label": "Electricity", "value": "", "frequency": "Monthly" },
+    { "label": "Water Bill", "value": "", "frequency": "Monthly" },
+    { "label": "Internet", "value": "", "frequency": "Monthly" }
+  ],
+  "Food": [
+    { "label": "Groceries", "value": "", "frequency": "Weekly" },
+    { "label": "Dining Out", "value": "", "frequency": "Weekly" }
+  ],
+  "Transport": [
+    { "label": "Fuel", "value": "", "frequency": "Weekly" },
+    { "label": "Public Transport", "value": "", "frequency": "Monthly" }
+  ],
+  "Credit Card": [
+    { "label": "Bank Card 1", "value": "", "frequency": "Monthly" },
+    { "label": "Bank Card 2", "value": "", "frequency": "Monthly" }
+  ],
+  "Loans": [
+    { "label": "Student Loan", "value": "", "frequency": "Monthly" },
+    { "label": "Car Loan", "value": "", "frequency": "Monthly" }
+  ],
+  "EMI": [
+    { "label": "Mobile Phone EMI", "value": "", "frequency": "Monthly" },
+    { "label": "Appliance EMI", "value": "", "frequency": "Monthly" }
+  ]
+}

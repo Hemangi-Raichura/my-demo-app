@@ -2,105 +2,88 @@
 
 import React, { useState, useEffect  } from 'react';
 import { useFormData } from './context/FormDataContext';  // Import context
-
+import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ChevronDown, ChevronUp, Edit } from 'lucide-react';
-//import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 
 
 
-const menu = {
-  Income: ['Salary', 'Freelance', 'Other Income'],
-  Expenses: ['Housing', 'Utilities', 'Food', 'Transport'],
-  Debt: ['Credit Card', 'Loans', 'EMI'],
-};
 
-const apiData = {
-  Salary: [
-    { label: 'Base Salary', value: '', frequency: 'Monthly' },
-    { label: 'Performance Bonus', value: '', frequency: '' },
-  ],
-  Freelance: [
-    { label: 'Website Development', value: '', frequency: 'Weekly' },
-    { label: 'Content Writing', value: '', frequency: 'Monthly' },
-  ],
-  'Other Income': [
-    { label: 'Rental Income', value: '', frequency: 'Monthly' },
-    { label: 'Dividends', value: '', frequency: '' },
-  ],
-  Housing: [
-    { label: 'Rent', value: '', frequency: 'Monthly' },
-    { label: 'Maintenance', value: '', frequency: '' },
-  ],
-  Utilities: [
-    { label: 'Electricity', value: '', frequency: 'Monthly' },
-    { label: 'Water Bill', value: '', frequency: 'Monthly' },
-    { label: 'Internet', value: '', frequency: 'Monthly' },
-  ],
-  Food: [
-    { label: 'Groceries', value: '', frequency: 'Weekly' },
-    { label: 'Dining Out', value: '', frequency: 'Weekly' },
-  ],
-  Transport: [
-    { label: 'Fuel', value: '', frequency: 'Weekly' },
-    { label: 'Public Transport', value: '', frequency: 'Monthly' },
-  ],
-  'Credit Card': [
-    { label: 'Bank Card 1', value: '', frequency: 'Monthly' },
-    { label: 'Bank Card 2', value: '', frequency: 'Monthly' },
-  ],
-  Loans: [
-    { label: 'Student Loan', value: '', frequency: 'Monthly' },
-    { label: 'Car Loan', value: '', frequency: 'Monthly' },
-  ],
-  EMI: [
-    { label: 'Mobile Phone EMI', value: '', frequency: 'Monthly' },
-    { label: 'Appliance EMI', value: '', frequency: 'Monthly' },
-  ],
-};
 
-export default function ReviewPage() {
-  
-const { formData } = useFormData();  // Access form data from context
+export default function ReviewPage  () {  
+    const { formData } = useFormData();  // Access form data from context
+    const navigate = useNavigate(); // inside your component
+    const [submitting, setSubmitting] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [collapsed, setCollapsed] = useState({});
 
-  const [submitting, setSubmitting] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [collapsed, setCollapsed] = useState({});
+    const [menu, setMenu] = useState({});
+const [apiData, setApiData] = useState({});
+
+// Fetch menu and apiData when component mounts
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const menuResponse = await fetch('/menuData.json');
+      const menuJson = await menuResponse.json();
+      setMenu(menuJson);
+
+      const apiResponse = await fetch('/apiData.json');
+      const apiJson = await apiResponse.json();
+      setApiData(apiJson);
+    } catch (error) {
+      console.error('Failed to load JSON data:', error);
+    }
+  };
+
+  fetchData();
+}, []);
+
 
   const getAllData = () => {
-    const result = {};
-    Object.keys(menu).forEach((mainCategory) => {
-      result[mainCategory] = {};
-      menu[mainCategory].forEach((sub) => {
-        const saved = localStorage.getItem(sub);
-        const defaultData = apiData[sub] || [];
-        result[mainCategory][sub] = saved ? JSON.parse(saved) : defaultData;
-      });
+  const result: any = {};
+  Object.keys(menu).forEach((mainCategory) => {
+    result[mainCategory] = {};
+    menu[mainCategory].forEach((sub: string) => {
+      const saved = localStorage.getItem(sub);
+      const defaultData = apiData[sub] || [];
+      result[mainCategory][sub] = saved ? JSON.parse(saved) : defaultData;
     });
-    return result;
-  };
+  });
+  return result;
+ };
+
 
   const allData = getAllData();
 
   const handleSubmitConfirmed = () => {
+
     setSubmitting(true);
     setShowConfirm(false);
     setTimeout(() => {
       setSubmitting(false);
       toast.success('Data successfully submitted to the API!', {
         position: 'top-right',
-        autoClose: 3000,
+        autoClose: 8000,
       });
 
      // Clear localStorage after successful submission
       Object.values(menu).flat().forEach((category) => {
         localStorage.removeItem(category);
       });
+     // Redirect to App Form after a small delay (same as toast display)
+    setTimeout(() => {
+      navigate('/'); 
+    }, 2000); // short delay so user sees toast 
     }, 1500);
   };
   
+  if (Object.keys(menu).length === 0 || Object.keys(apiData).length === 0) {
+  return <div className="p-6 text-gray-700">Loading data...</div>;
+ }
+ 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <ToastContainer />
@@ -243,5 +226,7 @@ const { formData } = useFormData();  // Access form data from context
     </div>
   );
 }
+
+
 // ReviewPage.txt
 // Displaying ReviewPage.txt.

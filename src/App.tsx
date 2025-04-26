@@ -298,6 +298,15 @@ navigate(location.pathname, { replace: true, state: null });
               {subItem}
             </button>
           ))}
+
+          <div className="ml-auto"></div>
+          <button
+            onClick={() => navigate("/review")}
+            className="bg-white text-gray-700 px-4 py-2 rounded hover:bg-blue-600"
+  >
+       Review
+       </button>
+       
         </div>
 
         {/* Table */}
