@@ -1,65 +1,59 @@
 // 
 
 import React, { useState, useEffect  } from 'react';
-import { useFormData } from './context/FormDataContext';  // Import context
+import { useFormData } from './context/FormDataContext';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ChevronDown, ChevronUp, Edit } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
+export default function ReviewPage() {
+  const { formData } = useFormData();
+  const navigate = useNavigate();
+  const [submitting, setSubmitting] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [collapsed, setCollapsed] = useState({});
+  const location = useLocation();
+  const scrollToMain = location.state?.scrollToMain;
+  const [menu, setMenu] = useState({});
+  const [apiData, setApiData] = useState({});
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const menuResponse = await fetch('/menuData.json');
+        const menuJson = await menuResponse.json();
+        setMenu(menuJson);
 
+        const apiResponse = await fetch('/apiData.json');
+        const apiJson = await apiResponse.json();
+        setApiData(apiJson);
+      } catch (error) {
+        console.error('Failed to load JSON data:', error);
+      }
+    };
 
-
-export default function ReviewPage  () {  
-    const { formData } = useFormData();  // Access form data from context
-    const navigate = useNavigate(); // inside your component
-    const [submitting, setSubmitting] = useState(false);
-    const [showConfirm, setShowConfirm] = useState(false);
-    const [collapsed, setCollapsed] = useState({});
-
-    const [menu, setMenu] = useState({});
-const [apiData, setApiData] = useState({});
-
-// Fetch menu and apiData when component mounts
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const menuResponse = await fetch('/menuData.json');
-      const menuJson = await menuResponse.json();
-      setMenu(menuJson);
-
-      const apiResponse = await fetch('/apiData.json');
-      const apiJson = await apiResponse.json();
-      setApiData(apiJson);
-    } catch (error) {
-      console.error('Failed to load JSON data:', error);
-    }
-  };
-
-  fetchData();
-}, []);
-
+    fetchData();
+  }, []);
 
   const getAllData = () => {
-  const result: any = {};
-  Object.keys(menu).forEach((mainCategory) => {
-    result[mainCategory] = {};
-    menu[mainCategory].forEach((sub: string) => {
-      const saved = localStorage.getItem(sub);
-      const defaultData = apiData[sub] || [];
-      result[mainCategory][sub] = saved ? JSON.parse(saved) : defaultData;
+    const result: any = {};
+    Object.keys(menu).forEach((mainCategory) => {
+      result[mainCategory] = {};
+      menu[mainCategory].forEach((sub: string) => {
+        const saved = localStorage.getItem(sub);
+        const defaultData = apiData[sub] || [];
+        result[mainCategory][sub] = saved ? JSON.parse(saved) : defaultData;
+      });
     });
-  });
-  return result;
- };
-
+    return result;
+  };
 
   const allData = getAllData();
 
   const handleSubmitConfirmed = () => {
-
     setSubmitting(true);
     setShowConfirm(false);
     setTimeout(() => {
@@ -69,21 +63,20 @@ useEffect(() => {
         autoClose: 8000,
       });
 
-     // Clear localStorage after successful submission
       Object.values(menu).flat().forEach((category) => {
         localStorage.removeItem(category);
       });
-     // Redirect to App Form after a small delay (same as toast display)
-    setTimeout(() => {
-      navigate('/'); 
-    }, 2000); // short delay so user sees toast 
+
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
     }, 1500);
   };
-  
+
   if (Object.keys(menu).length === 0 || Object.keys(apiData).length === 0) {
-  return <div className="p-6 text-gray-700">Loading data...</div>;
- }
- 
+    return <div className="p-6 text-gray-700">Loading data...</div>;
+  }
+
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <ToastContainer />
@@ -103,14 +96,18 @@ useEffect(() => {
               <div className="text-xl font-semibold text-gray-800">
                 {mainCategory} – Total: ${categoryTotal.toFixed(2)}
               </div>
-              <div className="flex gap-2">
 
-                <Link
-                    to="/"
-                    state={{ scrollToMain: mainCategory, scrollToSub: subCategories }}  // ✅ include both
-                    className="flex items-center gap-1 px-3 py-1 text-sm bg-blue-100 text-blue-600 hover:bg-blue-200 rounded-lg"
-                >   
-                <Edit className="w-4 h-4" /> Edit
+              
+              <div className="flex gap-2">
+                 <Link
+                  to="/"
+                  state={{
+                    scrollToMain: mainCategory,
+                    restoredData: subCategories,
+                  }}
+                  className="flex items-center gap-1 px-3 py-1 text-sm bg-blue-100 text-blue-600 hover:bg-blue-200 rounded-lg"
+                >
+                  <Edit className="w-4 h-4" /> Edit
                 </Link>
 
                 <button
@@ -125,13 +122,13 @@ useEffect(() => {
 
             {!isCollapsed && (
               <div className="p-4 overflow-x-auto">
-                <table className="w-full text-left text-sm">
+                <table className="w-full text-left text-sm table-fixed">
                   <thead className="bg-blue-100 text-gray-700">
                     <tr>
-                      <th className="p-3">Sub-Category</th>
-                      <th className="p-3">Name</th>
-                      <th className="p-3">Value</th>
-                      <th className="p-3">Frequency</th>
+                      <th className="p-3 w-1/4">Sub-Category</th>
+                      <th className="p-3 w-1/4">Name</th>
+                      <th className="p-3 w-1/4 text-right">Value</th>
+                      <th className="p-3 w-1/4 text-center">Frequency</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -143,21 +140,20 @@ useEffect(() => {
                             const value = parseFloat(row.value || 0);
                             subTotal += value;
                             return (
-                              <tr
-                                key={`${subCategory}-${i}`}
-                                className="hover:bg-gray-50 border-b"
-                              >
-                                <td className="p-3 align-top text-gray-600">{i === 0 ? subCategory : ''}</td>
-                                <td className="p-3 text-gray-800">{row.label}</td>
-                                <td className="p-3 text-right text-gray-700">${value.toFixed(2)}</td>
-                                <td className="p-3 text-gray-500">{row.frequency || '—'}</td>
+                              <tr key={`${subCategory}-${i}`} className="hover:bg-gray-50 border-b">
+                                <td className="p-3 w-1/4 align-top text-gray-600">{i === 0 ? subCategory : ''}</td>
+                                <td className="p-3 w-1/4 text-gray-800">{row.label}</td>
+                                <td className="p-3 w-1/4 text-right text-gray-700">${value.toFixed(2)}</td>
+                                <td className="p-3 w-1/4 text-center text-gray-500">{row.frequency?.frvalue || '—'}</td>
                               </tr>
                             );
                           })}
+                          
                           <tr className="font-semibold text-gray-800 bg-gray-100">
-                            <td colSpan={2} className="p-3 text-right">Subtotal ({subCategory}):</td>
-                            <td className="p-3 text-right">${subTotal.toFixed(2)}</td>
-                            <td className="p-3">—</td>
+                            <td className="p-3 w-1/4"></td>
+                            <td className="p-3 w-1/4">Subtotal ({Object.keys(subCategories)[0]}):</td>
+                            <td className="p-3 w-1/4 text-right">${subTotal.toFixed(2)}</td>
+                            <td className="p-3 w-1/4 text-center">—</td>
                           </tr>
                         </React.Fragment>
                       );
@@ -187,31 +183,30 @@ useEffect(() => {
         </button>
       </div>
 
-  {showConfirm && (
-  <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center">
-    <div className="bg-white rounded-xl shadow-xl p-6 max-w-md w-full transform transition-all">
-      <h3 className="text-lg font-semibold mb-4 text-gray-800">Confirm Submission</h3>
-      <p className="mb-6 text-gray-600">
-        Are you sure you want to submit all the entered data? This action cannot be undone.
-      </p>
-      <div className="flex justify-end gap-4">
-        <button
-          onClick={() => setShowConfirm(false)}
-          className="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300"
-        >
-          Cancel
-        </button>
-        <button
-          onClick={handleSubmitConfirmed}
-          className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
-        >
-          Yes, Submit
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
+      {showConfirm && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center">
+          <div className="bg-white rounded-xl shadow-xl p-6 max-w-md w-full transform transition-all">
+            <h3 className="text-lg font-semibold mb-4 text-gray-800">Confirm Submission</h3>
+            <p className="mb-6 text-gray-600">
+              Are you sure you want to submit all the entered data? This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-4">
+              <button
+                onClick={() => setShowConfirm(false)}
+                className="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSubmitConfirmed}
+                className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+              >
+                Yes, Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style>{`
         .loader {
@@ -226,7 +221,3 @@ useEffect(() => {
     </div>
   );
 }
-
-
-// ReviewPage.txt
-// Displaying ReviewPage.txt.

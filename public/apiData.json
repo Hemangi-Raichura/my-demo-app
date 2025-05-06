@@ -1,43 +1,43 @@
 {
   "Salary": [
-    { "label": "Base Salary", "value": "", "frequency": "Monthly" },
-    { "label": "Performance Bonus", "value": "", "frequency": "" }
+    { "label": "Base Salary", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": "" } },
+    { "label": "Performance Bonus", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": "" } }
   ],
   "Freelance": [
-    { "label": "Website Development", "value": "", "frequency": "Weekly" },
-    { "label": "Content Writing", "value": "", "frequency": "Monthly" }
+    { "label": "Website Development", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": "" } },
+    { "label": "Content Writing", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": "" } }
   ],
   "Other Income": [
-    { "label": "Rental Income", "value": "", "frequency": "Monthly" },
-    { "label": "Dividends", "value": "", "frequency": "" }
+    { "label": "Rental Income", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": "" } },
+    { "label": "Dividends", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": "" } }
   ],
   "Housing": [
-    { "label": "Rent", "value": "", "frequency": "Monthly" },
-    { "label": "Maintenance", "value": "", "frequency": "" }
+    { "label": "Rent", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": "" } },
+    { "label": "Maintenance", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": "" } }
   ],
   "Utilities": [
-    { "label": "Electricity", "value": "", "frequency": "Monthly" },
-    { "label": "Water Bill", "value": "", "frequency": "Monthly" },
-    { "label": "Internet", "value": "", "frequency": "Monthly" }
+    { "label": "Electricity", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": "" } },
+    { "label": "Water Bill", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": "" } },
+    { "label": "Internet", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": ""} }
   ],
   "Food": [
-    { "label": "Groceries", "value": "", "frequency": "Weekly" },
-    { "label": "Dining Out", "value": "", "frequency": "Weekly" }
+    { "label": "Groceries", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": "" } },
+    { "label": "Dining Out", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": "" } }
   ],
   "Transport": [
-    { "label": "Fuel", "value": "", "frequency": "Weekly" },
-    { "label": "Public Transport", "value": "", "frequency": "Monthly" }
+    { "label": "Fuel", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": "" } },
+    { "label": "Public Transport", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": "" } }
   ],
   "Credit Card": [
-    { "label": "Bank Card 1", "value": "", "frequency": "Monthly" },
-    { "label": "Bank Card 2", "value": "", "frequency": "Monthly" }
+    { "label": "Bank Card 1", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": "" } },
+    { "label": "Bank Card 2", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": "" } }
   ],
   "Loans": [
-    { "label": "Student Loan", "value": "", "frequency": "Monthly" },
-    { "label": "Car Loan", "value": "", "frequency": "Monthly" }
+    { "label": "Student Loan", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": "" } },
+    { "label": "Car Loan", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": "" } }
   ],
   "EMI": [
-    { "label": "Mobile Phone EMI", "value": "", "frequency": "Monthly" },
-    { "label": "Appliance EMI", "value": "", "frequency": "Monthly" }
+    { "label": "Mobile Phone EMI", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": "" } },
+    { "label": "Appliance EMI", "value": "", "frequency": { "options": ["Weekly", "Monthly"], "frvalue": "" } }
   ]
 }
