@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaMoneyBillWave, FaWallet, FaClipboardCheck, FaUserTie  } from "react-icons/fa";
-import { format, parse } from "date-fns"; // At top of file
+//import { format, parse } from "date-fns"; // At top of file
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -20,7 +21,8 @@ interface Field {
   IEFType: string;
 }
 
-const icons: Record<string, JSX.Element> = {
+const icons: Record<string, React.ReactNode>
+ = {
   General: <FaUserTie className="inline-block mr-2"/>,
   Salary: <FaMoneyBillWave className="inline-block mr-2" />,
   Expenses: <FaWallet className="inline-block mr-2" />,
@@ -97,7 +99,7 @@ const App: React.FC = () => {
   const hasSubCategories = subCategoryList.length > 0;
   const isLastCategory = activeCategory === categoryList[categoryList.length - 1];
   const isLastSubCategory = !hasSubCategories || activeSubCategory === subCategoryList[subCategoryList.length - 1];
-  const isFirstCategory = activeCategory === categoryList[0];
+  //const isFirstCategory = activeCategory === categoryList[0];
   const isFirstSubCategory = !hasSubCategories || activeSubCategory === subCategoryList[0];
 
   const filteredFields = fields.filter((f) => {
@@ -150,8 +152,8 @@ const App: React.FC = () => {
     }
   };
 
-  const renderField = (field: Field) => {
-    const { RowId, Name, IEFType, Lov, Value, Value2, Size, nDecimal, Frequency } = field;
+  /* const renderField = (field: Field) => {
+    const { RowId, Name, IEFType, Lov, Value, Value2, Size, nDecimal } = field;
 const lovOptions = Lov
   ? Lov.split(",").map((s) => s.trim()).filter((s) => s !== "")
   : [];
@@ -175,7 +177,7 @@ const lovOptions = Lov
       );
     }
     if (IEFType === "N") {
-  const step = nDecimal > 0 ? `0.${"0".repeat(nDecimal - 1)}1` : "1";
+  //const step = nDecimal > 0 ? `0.${"0".repeat(nDecimal - 1)}1` : "1";
   return (
     <div key={RowId} className="mb-4 grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
       <label className="text-sm font-normal">{Name}</label>
@@ -205,7 +207,7 @@ const lovOptions = Lov
 }
 return null;
 
-  };
+  }; */
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
@@ -282,13 +284,13 @@ return null;
 
     <tbody>
       {filteredFields.map((field) => {
-        const { RowId, Name, IEFType, Value, Value2, Frequency, Size, nDecimal, Lov } = field;
-        const step = nDecimal > 0 ? `0. £{"0".repeat(nDecimal - 1)}1` : "1";
+        const { RowId, Name, IEFType, Value, Value2, Size, nDecimal, Lov } = field;
+       // const step = nDecimal > 0 ? `0. £{"0".repeat(nDecimal - 1)}1` : "1";
 
         const renderInput = () => {
   switch (IEFType) {
     case "N":
-  const step = nDecimal > 0 ? `0.${"0".repeat(nDecimal - 1)}1` : "1";
+  //const step = nDecimal > 0 ? `0.${"0".repeat(nDecimal - 1)}1` : "1";
   return (
     <input
   type="number"

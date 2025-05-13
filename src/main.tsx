@@ -4,7 +4,7 @@ import App from "./App2.tsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ReviewPage from "./reviewN.tsx";
 import JsonInputPage from "./jsonInputPage.tsx";
-import { FormDataProvider } from "./context/formDataContext.tsx";
+import { FormDataProvider } from "./context/FormDataContext.tsx";
 import OutputJsonPage from "./jsonOutputPage.tsx";
 
 
@@ -17,7 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   
   <React.StrictMode>
     <FormDataProvider>
-  <BrowserRouter basename="/my-demo-app/">
+  <BrowserRouter>
     <Routes>
       <Route path="/jsonInputPage" element={<JsonInputPage />} />
 
