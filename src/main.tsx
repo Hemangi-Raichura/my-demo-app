@@ -17,7 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   
   <React.StrictMode>
     <FormDataProvider>
-  <BrowserRouter>
+  <BrowserRouter basename="/my-demo-app">
     <Routes>
       <Route path="/jsonInputPage" element={<JsonInputPage />} />
 
