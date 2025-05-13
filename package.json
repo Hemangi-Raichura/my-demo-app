@@ -1,17 +1,16 @@
 {
   "name": "react-vite-ts",
   "private": true,
-  "homepage": "https://Hemangi-Raichura.github.io/my-demo-app",
+  
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
-  },
+  "dev": "vite",
+  "build": "vite build",
+  "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+  "preview": "vite preview"
+}
+,
   "dependencies": {
     "@workday/canvas-kit-react-fonts": "12.6.5",
     "date-fns": "^4.1.0",
