@@ -38,37 +38,41 @@ const App: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const fromCategory = queryParams.get("category")?.trim();
+ useEffect(() => {
+  const queryParams = new URLSearchParams(location.search);
+  const fromCategory = queryParams.get("category")?.trim();
 
-    const saved = localStorage.getItem("webformData");
-    if (saved) {
-      const data = JSON.parse(saved);
-      setFields(data);
-      const firstCat = fromCategory || data.find((f: Field) => f.Category.trim())?.Category.trim() || "";
-      setActiveCategory(firstCat);
-      const firstSub = data.find((f: Field) => f.Category.trim() === firstCat && f.SubCategory.trim())?.SubCategory.trim() || "";
-      setActiveSubCategory(firstSub);
-    } else {
-      /* fetch("/iefields_render_data.json")
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.data) {
-            const initialized = data.data.map((field: Field) => ({
-              ...field,
-              Value: field.Value ?? (field.IEFType === "N" ? 0 : ""),
-              Frequency: field.Frequency ?? "",
-            }));
-            setFields(initialized);
-            const firstCat = fromCategory || initialized.find((f) => f.Category.trim())?.Category.trim() || "";
-            setActiveCategory(firstCat);
-            const firstSub = initialized.find((f) => f.Category.trim() === firstCat && f.SubCategory.trim())?.SubCategory.trim() || "";
-            setActiveSubCategory(firstSub); 
-          }
-        }); */
-    }
-  }, [location.search]);
+  const saved = localStorage.getItem("webformData");
+
+  if (saved) {
+    const data = JSON.parse(saved);
+    setFields(data);
+    const firstCat = fromCategory || data.find((f: Field) => f.Category.trim())?.Category.trim() || "";
+    setActiveCategory(firstCat);
+    const firstSub = data.find((f: Field) => f.Category.trim() === firstCat && f.SubCategory.trim())?.SubCategory.trim() || "";
+    setActiveSubCategory(firstSub);
+  } else {
+    const API_BASE = "https://apirepo-0bkw.onrender.com";
+
+    fetch(`${API_BASE}/formdata`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.fields) {
+          const initialized = data.fields.map((field: Field) => ({
+            ...field,
+            Value: field.Value ?? (field.IEFType === "N" ? 0 : ""),
+            Frequency: field.Frequency ?? "",
+          }));
+          setFields(initialized);
+          const firstCat = fromCategory || initialized.find((f: Field) => f.Category.trim())?.Category.trim() || "";
+          setActiveCategory(firstCat);
+          const firstSub = initialized.find((f: Field) => f.Category.trim() === firstCat && f.SubCategory.trim())?.SubCategory.trim() || "";
+          setActiveSubCategory(firstSub);
+        }
+      });
+  }
+}, [location.search]);
+
 
   useEffect(() => {
     if (fields.length > 0) {
@@ -85,14 +89,24 @@ const App: React.FC = () => {
   };
 
   const handleClear = () => {
-    const reset = fields.map((f) => ({
-      ...f,
-      Value: "",
-      Value2: "",
-    }));
-    setFields(reset);
-    localStorage.removeItem("webformData");
-  };
+  const reset = fields.map((f) => {
+    const matchCategory = f.Category.trim() === activeCategory.trim();
+    const matchSub = activeSubCategory.trim() === "" || f.SubCategory.trim() === activeSubCategory.trim();
+
+    if (matchCategory && matchSub) {
+      return {
+        ...f,
+        Value: "",
+        Value2: "",
+      };
+    }
+    return f;
+  });
+
+  setFields(reset);
+  localStorage.setItem("webformData", JSON.stringify(reset));
+};
+
 
   const categoryList = Array.from(new Set(fields.map((f) => f.Category.trim()).filter((cat) => cat !== "")));
   const subCategoryList = Array.from(new Set(fields.filter((f) => f.Category.trim() === activeCategory.trim() && f.SubCategory.trim() !== "").map((f) => f.SubCategory.trim())));

@@ -1,5 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+const API_BASE = "https://apirepo-0bkw.onrender.com"; // 🔁 Replace with your deployed API base
+
 
 interface Field {
   RowId: number;
@@ -31,6 +33,27 @@ const ReviewPage: React.FC = () => {
     groupedByCategory[cat].push(field);
   }
 
+  const handleSubmitToAPI = () => {
+  fetch(`${API_BASE}/submissions`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(fields),
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Failed to submit");
+      return res.json();
+    })
+    .then(() => {
+      alert("Form successfully submitted to API!");
+      navigate("/App2"); // ✅ or redirect anywhere you want
+    })
+    .catch((err) => {
+      console.error("Submission failed:", err);
+      alert("Submission failed. Please try again.");
+    });
+};
+
+
   const getPlaceholder = (f: Field): string => {
     if (f.IEFType === "C") return "";
     if (f.IEFType === "N") return f.nDecimal > 0 ? "0.00" : "0";
@@ -42,7 +65,7 @@ const ReviewPage: React.FC = () => {
       .reduce((sum, f) => sum + (parseFloat(f.Value) || 0), 0);
   };
 
-  const grandTotal = categories.reduce((total, cat) => total + getCategoryTotal(groupedByCategory[cat]), 0);
+  //const grandTotal = categories.reduce((total, cat) => total + getCategoryTotal(groupedByCategory[cat]), 0);
 
   return (
     <div className="p-8 space-y-10 max-w-6xl mx-auto">
@@ -130,13 +153,11 @@ const ReviewPage: React.FC = () => {
         </div>
       ))}
 
-      <div className="text-right text-xl font-bold pt-4">
-        Grand Total: £{grandTotal.toFixed(2)}
-      </div>
+     
 
       <div className="text-center pt-6">
         <button
-          onClick={() => navigate("/jsonOutputPage")}
+          onClick={() => handleSubmitToAPI()}
           className="px-6 py-3 bg-[#ff9933] text-white text-lg font-semibold rounded shadow hover:brightness-110"
         >
           Confirm & Submit
