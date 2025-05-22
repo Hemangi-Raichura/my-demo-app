@@ -1,5 +1,0 @@
-{
-  "Income": ["Salary", "Freelance", "Other Income"],
-  "Expenses": ["Housing", "Utilities", "Food", "Transport"],
-  "Debt": ["Credit Card", "Loans", "EMI"]
-}

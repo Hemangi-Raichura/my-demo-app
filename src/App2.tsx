@@ -37,6 +37,8 @@ const App: React.FC = () => {
   const [activeSubCategory, setActiveSubCategory] = useState<string>("");
   const navigate = useNavigate();
   const location = useLocation();
+  const [frozenMap, setFrozenMap] = useState<Record<number, boolean>>({});
+
 
  useEffect(() => {
   const queryParams = new URLSearchParams(location.search);
@@ -307,15 +309,63 @@ return null;
   //const step = nDecimal > 0 ? `0.${"0".repeat(nDecimal - 1)}1` : "1";
   return (
     <input
-  type="number"
-  value={(Value === "" || Value === 0 )? "" : Value}
-  onChange={(e) =>
-    handleValueChange(RowId, e.target.value === "" ? "" : parseFloat(e.target.value))
-  }
-  placeholder={nDecimal > 0 ? "0.00" : "0"}
-  step={nDecimal > 0 ? `0.${"0".repeat(nDecimal - 1)}1` : "1"}
-  className="border rounded px-2 py-1 text-sm w-full"
+  type="text"
+  inputMode="decimal"
+  value={Value}
+  onChange={(e) => {
+    const input = e.target.value;
+   
+
+    // Allow empty input
+    if (input === "") {
+      setFrozenMap((prev) => ({ ...prev, [RowId]: false }));
+      handleValueChange(RowId, "");
+      return;
+    }
+
+    // Freeze on illegal decimal input when nDecimal === 0
+    if (nDecimal === 0 && input.includes(".")) {
+      setFrozenMap((prev) => ({ ...prev, [RowId]: true }));
+      return;
+    }
+
+    // For decimal fields, validate based on allowed places
+    if (nDecimal > 0) {
+      const decimalRegex = new RegExp(`^\\d*(\\.\\d{0,${nDecimal}})?$`);
+      if (!decimalRegex.test(input)) return;
+    }
+
+    // Accept digits only if decimals not allowed
+    if (nDecimal === 0 && /^\d*$/.test(input)) {
+      handleValueChange(RowId, input);
+      return;
+    }
+
+    handleValueChange(RowId, input);
+  }}
+  onKeyDown={(e) => {
+    const isFrozen = frozenMap[RowId] || false;
+
+    // Block all input when frozen, except backspace/delete
+    if (isFrozen && !["Backspace", "Delete"].includes(e.key)) {
+      e.preventDefault();
+    }
+
+    // Unfreeze once dot is deleted
+    if (["Backspace", "Delete"].includes(e.key)) {
+      const valAfter = Value.slice(0, -1);
+      if (!valAfter.includes(".")) {
+        setFrozenMap((prev) => ({ ...prev, [RowId]: false }));
+      }
+    }
+  }}
+  placeholder={nDecimal === 0 ? "Whole number only" : `e.g. 0.${"0".repeat(nDecimal)}`}
+  className={`border rounded px-2 py-1 text-sm w-full transition-all duration-150
+    ${frozenMap[RowId] ? "border-red-500 bg-red-100 placeholder:text-red-500" : "border-gray-300"}`}
 />
+
+
+
 
   );
 
