@@ -46,8 +46,8 @@ const ReviewPage: React.FC = () => {
     .then(() => {
       alert("Form successfully submitted to API!");
        localStorage.removeItem("webformData");
-      window.location.href = "/"; // 🔁 Hard reload to clear state
-      //navigate("/App2"); // ✅ or redirect anywhere you want
+      //window.location.href = "/"; // 🔁 Hard reload to clear state
+      navigate("/App2"); // ✅ or redirect anywhere you want
     })
     .catch((err) => {
       console.error("Submission failed:", err);
