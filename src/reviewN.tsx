@@ -71,7 +71,16 @@ const ReviewPage: React.FC = () => {
 
   return (
     <div className="p-8 space-y-10 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Review Your Inputs</h1>
+      <div className="sticky top-0 z-50 bg-white pb-2 pt-4 flex justify-between items-center border-b shadow-sm">
+  <h1 className="text-2xl font-bold pl-2">Review Your Inputs</h1>
+  <button
+    onClick={() => handleSubmitToAPI()}
+    className="mr-2 px-6 py-2 bg-[#ffa64d] text-white text-lg font-semibold rounded shadow hover:brightness-110"
+  >
+    Confirm & Submit
+  </button>
+</div>
+
 
       {categories
         .filter((cat) => groupedByCategory[cat].some(f => f.IEFType !== "H"))
@@ -157,14 +166,15 @@ const ReviewPage: React.FC = () => {
 
      
 
-      <div className="text-center pt-6">
-        <button
-          onClick={() => handleSubmitToAPI()}
-          className="px-6 py-3 bg-[#ff9933] text-white text-lg font-semibold rounded shadow hover:brightness-110"
-        >
-          Confirm & Submit
-        </button>
-      </div>
+      {/* <div className="sticky top-0 z-50 bg-white py-4 text-center border-b shadow-sm">
+  <button
+    onClick={() => handleSubmitToAPI()}
+    className="px-6 py-3 bg-[#ff9933] text-white text-lg font-semibold rounded shadow hover:brightness-110"
+  >
+    Confirm & Submit
+  </button>
+</div> */}
+
     </div>
   );
 };

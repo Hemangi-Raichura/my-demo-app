@@ -27,6 +27,8 @@ const icons: Record<string, React.ReactNode>
   Salary: <FaMoneyBillWave className="inline-block mr-2" />,
   Expenses: <FaWallet className="inline-block mr-2" />,
   Test: <FaClipboardCheck  className="inline-block mr-2" />,
+  Test2: <FaClipboardCheck  className="inline-block mr-2" />,
+  Default: <FaWallet className="inline-block mr-2"/>
 };
 
 const frequencyOptions = ["Weekly", "Monthly", "Quarterly", "Annually"];
@@ -168,70 +170,14 @@ const App: React.FC = () => {
     }
   };
 
-  /* const renderField = (field: Field) => {
-    const { RowId, Name, IEFType, Lov, Value, Value2, Size, nDecimal } = field;
-const lovOptions = Lov
-  ? Lov.split(",").map((s) => s.trim()).filter((s) => s !== "")
-  : [];
-    if (IEFType === "H") return null;
-    if (IEFType === "D") {
-      return <div key={RowId} className="mb-4"><label className="block text-sm font-normal mb-1">{Name}</label><input type="date" value={Value} onChange={(e) => handleValueChange(RowId, e.target.value)} className="border px-3 py-2 w-full rounded" /></div>;
-    }
-    if (IEFType === "C") {
-      return (
-        <div key={RowId} className="mb-4">
-          <label className="block text-sm font-normal mb-1">{Name}</label>
-          {lovOptions.length > 0 ? (
-            <select value={Value} onChange={(e) => handleValueChange(RowId, e.target.value)} className="border px-3 py-2 w-full rounded">
-              <option value="">Select</option>
-              {lovOptions.map((option, i) => <option key={i} value={option}>{option}</option>)}
-            </select>
-          ) : (
-            <input type="text" value={Value} onChange={(e) => handleValueChange(RowId, e.target.value)} maxLength={Size} className="border px-3 py-2 w-full rounded" />
-          )}
-        </div>
-      );
-    }
-    if (IEFType === "N") {
-  //const step = nDecimal > 0 ? `0.${"0".repeat(nDecimal - 1)}1` : "1";
-  return (
-    <div key={RowId} className="mb-4 grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-      <label className="text-sm font-normal">{Name}</label>
-      <input
-  type="number"
-  value={(Value === "" || Value === 0)? "" : Value}
-  onChange={(e) =>
-    handleValueChange(RowId, (e.target.value === "" )? "" : parseFloat(e.target.value))
-  }
-  placeholder={nDecimal > 0 ? "0.00" : "0"}
-  step={nDecimal > 0 ? `0.${"0".repeat(nDecimal - 1)}1` : "1"}
-  className="border rounded px-2 py-1 text-sm w-full"
-/>
-
-      <select
-        value={Value2}
-        onChange={(e) => handleFrequencyChange(RowId, e.target.value)}
-        className="border px-3 py-2 w-full rounded"
-      >
-        <option value="">Select</option>
-        {frequencyOptions.map((freq) => (
-          <option key={freq}>{freq}</option>
-        ))}
-      </select>
-    </div>
-  );
-}
-return null;
-
-  }; */
-
+ 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
       {/* Sidebar */}
       <div className="md:w-48 w-full bg-white shadow-md p-4">
         <h2 className="text-xl font-semibold mb-4">Categories</h2>
         {categoryList.map((cat) => (
-          <div key={cat} className={`p-2 mb-2 cursor-pointer rounded-lg transition hover:bg-blue-100  ${activeCategory === cat ? "bg-blue-200 font-bold" : ""}`} onClick={() => {
+          <div key={cat} className={`p-2 mb-2 cursor-pointer rounded-lg transition hover:bg-blue-100  ${activeCategory === cat ? "bg-blue-200 font-semibold" : ""}`} onClick={() => {
             setActiveCategory(cat);
             const subcats = fields.filter((f) => f.Category.trim() === cat).map((f) => f.SubCategory.trim()).filter((s) => s);
             setActiveSubCategory(subcats[0] || "");
@@ -248,11 +194,11 @@ return null;
 
       </div>
       
-      <main className="flex-1 p-8 overflow-y-auto">
+      <main className="flex-1 p-6 overflow-y-auto">
 
        
 
-        <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
+        <div className="flex flex-wrap justify-between items-start gap-3 mb-6">
   {/* Left: Subcategory buttons if they exist */}
   <div className="flex flex-wrap gap-3">
     {hasSubCategories &&
@@ -260,10 +206,10 @@ return null;
         <button
           key={sub}
           onClick={() => setActiveSubCategory(sub)}
-          className={`px-2 py-2 rounded-full border  ${
+          className={`px-4 py-2 rounded-full border transition hover:bg-blue-200 hover:text-black ${
             activeSubCategory === sub
               ? "bg-blue-500 text-white"
-              : "bg-gray-300 hover:bg-gray-200 hover:font-bold"
+              : "bg-white "
           }`}
         >
           {sub}
@@ -272,198 +218,204 @@ return null;
   </div>
 
   {/* Right: Save & Review button always visible */}
-  <div className="shrink-0">
+  <div className="ml-auto">
     <button
       onClick={() => navigate("/reviewN")}
-      className="px-4 py-2 rounded-full border transition bg-blue-500 text-white hover:bg-blue-200 hover:text-gray-700  hover:font-bold">
+      className="px-4 py-2 rounded-full border transition bg-blue-500 text-white hover:bg-blue-200 hover:text-gray-700">
     
       Review
     </button>
   </div>
 </div>
 
- <div className="bg-white p-6 shadow rounded-lg">
-      {/* <h3 className="text-2xl font-semibold mb-4">
-            Salary
-          </h3> */}
-          <form className="space-y-4">
-       
-          <div className="overflow-x-auto max-h-[400px] overflow-y-auto">
-  <table className="w-full table-fixed border-separate border-spacing-y-2">
-    <thead className="text-left font-semibold text-gray-700">
-  <tr>
-    <th className="px-4 py-2 w-1/3">Name</th>
-    <th className="px-4 py-2 w-1/3">Value</th>
-    <th className="px-4 py-2 w-1/3">Frequency</th>
-  </tr>
-</thead>
+ <div className="bg-white p-6 shadow rounded-lg  p-6 max-w-4x overflow-x-auto ">
+	
+<form className="space-y-2 flex flex-col h-full" >
+  {/* Sticky Header */}
+  <div className="grid grid-cols-3 gap-4 items-center font-semibold text-gray-600 border-b pb-2 sticky top-0 bg-white z-10">
+    <span>Name</span>
+    <span>Value</span>
+    <span>Frequency</span>
+  </div>
 
-    <tbody>
-      {filteredFields.map((field) => {
-        const { RowId, Name, IEFType, Value, Value2, Size, nDecimal, Lov } = field;
-       // const step = nDecimal > 0 ? `0. £{"0".repeat(nDecimal - 1)}1` : "1";
+       {/* Scrollable field rows */}
+  <div className="space-y-2 p-2 overflow-y-auto" style={{ maxHeight: "calc(100vh - 300px)" }}>
 
-        const renderInput = () => {
-  switch (IEFType) {
-    case "N":
-  //const step = nDecimal > 0 ? `0.${"0".repeat(nDecimal - 1)}1` : "1";
-  return (
-    <input
-  type="text"
-  inputMode="decimal"
-  value={Value}
-  onChange={(e) => {
-    const input = e.target.value;
-   
+    
+  {filteredFields.length === 0 ? (
+    <p className="text-gray-500 mt-4">No data available for this category.</p>
+  ) : (
+    filteredFields.map((field) => {
+      const { RowId, Name, IEFType, Value, Value2, Size, nDecimal, Lov } = field;
 
-    // Allow empty input
-    if (input === "") {
-      setFrozenMap((prev) => ({ ...prev, [RowId]: false }));
-      handleValueChange(RowId, "");
-      return;
-    }
+      const renderInput = () => {
+        switch (IEFType) {
+          case "N":
+            return (
+              <input
+                type="text"
+                inputMode="decimal"
+                value={Value === "" || Value === "0" || Value === 0 ? "" : Value}
 
-    // Freeze on illegal decimal input when nDecimal === 0
-    if (nDecimal === 0 && input.includes(".")) {
-      setFrozenMap((prev) => ({ ...prev, [RowId]: true }));
-      return;
-    }
+                onChange={(e) => {
+                  const input = e.target.value;
+                  if (input === "") {
+                    setFrozenMap((prev) => ({ ...prev, [RowId]: false }));
+                    handleValueChange(RowId, "");
+                    return;
+                  }
+                  // Reject if input contains any non-numeric characters (excluding . for decimals)
+                  if (!/^\d*\.?\d*$/.test(input)) return;
 
-    // For decimal fields, validate based on allowed places
-    if (nDecimal > 0) {
-      const decimalRegex = new RegExp(`^\\d*(\\.\\d{0,${nDecimal}})?$`);
-      if (!decimalRegex.test(input)) return;
-    }
+                  if (nDecimal === 0 && input.includes(".")) {
+                    setFrozenMap((prev) => ({ ...prev, [RowId]: true }));
+                    return;
+                  }
+                  if (nDecimal > 0) {
+                    const decimalRegex = new RegExp(`^\\d*(\\.\\d{0,${nDecimal}})?$`);
+                    if (!decimalRegex.test(input)) return;
+                  }
+                  if (nDecimal === 0 && /^\d*$/.test(input)) {
+                    handleValueChange(RowId, input);
+                    return;
+                  }
+                  handleValueChange(RowId, input);
+                }}
+                onKeyDown={(e) => {
+                  const isFrozen = frozenMap[RowId] || false;
+                  if (isFrozen && !["Backspace", "Delete"].includes(e.key)) {
+                    e.preventDefault();
+                  }
+                  if (["Backspace", "Delete"].includes(e.key)) {
+                    const valAfter = Value.slice(0, -1);
+                    if (!valAfter.includes(".")) {
+                      setFrozenMap((prev) => ({ ...prev, [RowId]: false }));
+                    }
+                  }
+                }}
+                placeholder={nDecimal === 0 ? "Whole number only" : `e.g. 0.${"0".repeat(nDecimal)}`}
+                className={`border rounded-md px-2 py-1 w-full focus:ring-blue-500 focus:border-blue-500 transition-all duration-150 ${frozenMap[RowId] ? "border-red-500 bg-red-100 placeholder:text-red-500" : "border-gray-300"}`}
+              />
+            );
 
-    // Accept digits only if decimals not allowed
-    if (nDecimal === 0 && /^\d*$/.test(input)) {
-      handleValueChange(RowId, input);
-      return;
-    }
+          case "C":
+            const isDropdown = Lov?.split(",").some((s) => s.trim());
+            const lovOptions = isDropdown ? Lov.split(",").map((s) => s.trim()).filter((s) => s !== "") : [];
+            return isDropdown && lovOptions.length > 0 ? (
+              <select
+                value={Value}
+                onChange={(e) => handleValueChange(RowId, e.target.value)}
+                className="border border-gray-300 rounded-md px-2 py-1 w-full focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">Select</option>
+                {lovOptions.map((option, i) => (
+                  <option key={i} value={option}>{option}</option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type="text"
+                value={Value}
+                onChange={(e) => handleValueChange(RowId, e.target.value)}
+                maxLength={Size}
+                className="border border-gray-300 rounded-md px-2 py-1 w-full focus:ring-blue-500 focus:border-blue-500"
+              />
+            );
 
-    handleValueChange(RowId, input);
-  }}
-  onKeyDown={(e) => {
-    const isFrozen = frozenMap[RowId] || false;
+          case "D":
+            const parsedDate = Value ? new Date(Value) : null;
+            return (
+              <DatePicker
+                selected={parsedDate}
+                onChange={(date: Date | null) =>
+                  handleValueChange(RowId, date ? date.toISOString() : "")
+                }
+                dateFormat="MM-dd-yyyy"
+                placeholderText="MM-DD-YYYY"
+                className="border border-gray-300 rounded-md px-2 py-1 w-full focus:ring-blue-500 focus:border-blue-500"
+              />
+            );
 
-    // Block all input when frozen, except backspace/delete
-    if (isFrozen && !["Backspace", "Delete"].includes(e.key)) {
-      e.preventDefault();
-    }
+          default:
+            return null;
+        }
+      };
 
-    // Unfreeze once dot is deleted
-    if (["Backspace", "Delete"].includes(e.key)) {
-      const valAfter = Value.slice(0, -1);
-      if (!valAfter.includes(".")) {
-        setFrozenMap((prev) => ({ ...prev, [RowId]: false }));
-      }
-    }
-  }}
-  placeholder={nDecimal === 0 ? "Whole number only" : `e.g. 0.${"0".repeat(nDecimal)}`}
-  className={`border rounded px-2 py-1 text-sm w-full transition-all duration-150
-    ${frozenMap[RowId] ? "border-red-500 bg-red-100 placeholder:text-red-500" : "border-gray-300"}`}
-/>
-
-
-
-
-  );
-
-    case "C":
-      const isDropdown = Lov?.split(",").some((s) => s.trim());
-      const lovOptions = isDropdown
-        ? Lov.split(",").map((s) => s.trim()).filter((s) => s !== "")
-        : [];
-
-      return isDropdown && lovOptions.length > 0 ? (
-        <select
-          value={Value}
-          onChange={(e) => handleValueChange(RowId, e.target.value)}
-          className="border rounded px-2 py-1 text-sm w-full"
-        >
-          <option value="">Select</option>
-          {lovOptions.map((option, i) => (
-            <option key={i} value={option}>{option}</option>
-          ))}
-        </select>
-      ) : (
-        <input
-          type="text"
-          value={Value}
-          onChange={(e) => handleValueChange(RowId, e.target.value)}
-          maxLength={Size}
-          className="border rounded px-2 py-1 text-sm w-full"
-        />
+      return (
+        <div key={RowId} className="grid grid-cols-3 gap-4 items-center">
+          <label>{Name}</label>
+          {renderInput()}
+          <div>
+            {IEFType === "N" ? (
+              <select
+                value={Value2}
+                onChange={(e) => handleFrequencyChange(RowId, e.target.value)}
+                className="border border-gray-300 rounded-md px-2 py-1 w-full focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">Select</option>
+                {frequencyOptions.map((freq) => (
+                  <option key={freq}>{freq}</option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type="text"
+                value="NA"
+                disabled
+                className="border border-gray-300 rounded-md px-2 py-1 text-gray-500 bg-gray-100 w-full"
+              />
+            )}
+          </div>
+        </div>
       );
-
-    case "D":
-  const parsedDate = Value ? new Date(Value) : null;
-  return (
-    <DatePicker
-      selected={parsedDate}
-      onChange={(date: Date | null) =>
-        handleValueChange(RowId, date ? date.toISOString() : "")
-      }
-      dateFormat="MM-dd-yyyy"
-      placeholderText="MM-DD-YYYY"
-      className="border rounded px-2 py-1 text-sm w-full"
-    />
-  );
-
-
-    default:
-      return null;
-  }
-};
-
-
-        return (
-          <tr key={RowId} className="bg-white shadow rounded">
-  <td className="px-2 py-1 w-1/3 whitespace-nowrap">{Name}</td>
-  <td className="px-2 py-1 w-1/3">{renderInput()}</td>
-  <td className="px-2 py-1 w-1/3">
-    {IEFType === "N" ? (
-      <select
-        value={Value2}
-        onChange={(e) => handleFrequencyChange(RowId, e.target.value)}
-        className="border rounded px-2 py-1 text-sm w-full"
-      >
-        <option value="">Select</option>
-        {frequencyOptions.map((freq) => (
-          <option key={freq}>{freq}</option>
-        ))}
-      </select>
-    ) : (
-      <input
-        type="text"
-        value="NA"
-        disabled
-        className="border rounded px-2 py-1 text-sm w-full text-gray-500 bg-gray-100"
-      />
-    )}
-  </td>
-</tr>
-
-        );
-      })}
-    </tbody>
-  </table>
+    })
+  )}
 </div>
 
-          <div className="font-semibold mt-6 text-right text-lg">
-            Total:  £{total.toFixed(2)}
-          </div>
+ {/* Sticky Footer */}
+  <div className="flex justify-between items-center mt-6 sticky bottom-0 bg-white py-2 z-10">
+   
+  
+    <div className="text-lg font-medium">
+      Total: £{total.toFixed(2)}
+    </div>
+    <div className="flex gap-4">
+      <button
+        type="button"
+        onClick={handlePrevious}
+        className="bg-white text-blue px-4 py-2 border border-blue-500 rounded-md hover:bg-blue-200 hover:text-black transition"
+      >
+        Previous
+      </button>
+      <button
+        type="button"
+        onClick={handleClear}
+        className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400 transition"
+      >
+        Clear
+      </button>
+      {isLastCategory && isLastSubCategory ? (
 
-          <div className="mt-6 flex justify-end space-x-4">
-            <button onClick={handlePrevious} type="button" className="px-4 py-2 bg-gray-100 text-black hover:font-semibold hover:text-white rounded shadow hover:bg-blue-500">Previous</button>
-            <button onClick={handleClear} type="button" className="px-4 py-2 bg-gray-300 text-black hover:font-semibold hover:text-white rounded shadow hover:bg-black">Clear</button>
-            {isLastCategory && isLastSubCategory ? (
-            <button onClick={() => navigate("/reviewN")} type="button" className="px-4 py-2 bg-gray-100 text-black hover:font-semibold hover:text-white rounded shadow hover:bg-blue-500">Next</button>
-             ) : (
-               <button onClick={handleNext} type="button" className="px-4 py-2 bg-gray-100 text-black hover:font-semibold hover:text-white rounded shadow hover:bg-blue-500">Next</button> 
-             )}
-          </div>
-          </form>
+      <button
+        type="button"
+        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-200 hover:text-black transition"
+        onClick={() => navigate("/reviewN")}
+      >
+        Next
+      </button>) : (
+        <button
+        type="button"
+        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-200 hover:text-black transition"
+        onClick={handleNext}
+      >
+        Next
+      </button>
+      )}
+    </div>
+    </div>
+  
+</form>
+
         </div>
 
         
